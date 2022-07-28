@@ -1,7 +1,11 @@
 const express = require('express')
+const { UserDB } = require('./Users')
+const { verifyToken } = require("./services/jwt")
 const app = express()
 const port = 5000
 const jwt = require('jsonwebtoken');
+const bodyParser = require ('body-parser');
+app.use(bodyParser.json());
 
 //  just check
 
@@ -11,18 +15,23 @@ const jwt = require('jsonwebtoken');
 // Authenticate page 
 app.get('/api', (req, res) => {
   res.json({
-    message: 'Welcome to the our authenticate  section  '
+    message: 'Welcome to the our authenticate  section  now '
   }
   );
 });
 
 app.post('/api/user/register', (req,res)=>{
   // 1. extract payload from request body
-  // 2. if the payload contians valid user data, add a new user to the database
-  // 3. login the newly registered user by returning a jwt
-  res.json({
+  const user = req.body;
+  console.log(user)
+  // 2. if the payload contians valid user data and
+  // 2.1 check if the user with the given email already exists in our database
+  // 2.2 add a new user to the database
+  UserDB.addUser(user)
+  console.log(UserDB.users)
 
-  })
+  // 3. login the newly registered user by returning a jwt.
+  res.json(UserDB.users.length)
 })
 
 
@@ -43,13 +52,10 @@ app.post('/api/user/authenticate', verifyToken, (req, res) => {
 
 app.post('/api/user/login', (req, res) => {
   // Mock user
-  const user = {
-    id: 1,
-    username: 'brad',
-    email: 'brad@gmail.com'
-  }
   // 1. extract payload from request body
+  console.log(req.body)
   // 2. check that request payload contains valid user data
+  
   // 3. verify that the user exists in our database
   // 4. match password
   // 5. login if passwords match
@@ -63,27 +69,6 @@ app.post('/api/user/login', (req, res) => {
 
 
 
-// Verify Token
-function verifyToken(req, res, next) {
-  // Get auth header value
-  const bearerHeader = req.headers['authorization'];
-  console.log(bearerHeader);
-  // Check if bearer is undefined
-  if (typeof bearerHeader !== 'undefined') {
-    // Split at the space
-    const bearer = bearerHeader.split(' ');
-    // Get token from array
-    const bearerToken = bearer[1];
-    // Set the token
-    req.token = bearerToken;
-    // Next middleware
-    next();
-  } else {
-    // Forbidden
-    res.sendStatus(403);
-  }
-
-}
 app.listen(5000, () => console.log('Server started on port 5000'));
 
 
