@@ -6,25 +6,23 @@ import './Register.css';
 export default function RegisterForm() {
 
   
-const initialValues= { username: "", email:"", password:"" };
-const [formValues, setFormValues]= useState(initialValues);
 
 
-// const [user,setUser] = useState({
-//   userName: "",
-//   email: "",
-//   password: ""
-// })
-// const handleChange= e => {
-//   const {name , value}= e.target
-//   setUser({
-//     ...user,
-//     [name]:value
-//   })
-// }
+const [user,setUser] = useState({
+  userName: "",
+  email: "",
+  password: ""
+})
+const handleChange= e => {
+  const {name , value}= e.target
+  setUser({
+    ...user,
+    [name]:value
+  })
+}
     return (
     
-    <form onSubmit={handleSubmit} >
+    <form  >
  
       <label>Username: </label>
       <input type="text" placeholder="Enter Username"
