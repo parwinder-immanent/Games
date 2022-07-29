@@ -48,7 +48,7 @@ app.post('/api/user/register', [
 
   // 2.1 check if the user with the given email already exists in our database
 
-  if (UserDB.findUserByEmail(email) &&   UserDB.findUserByName(name) ) {
+  if (UserDB.findUserByEmail(email) && UserDB.findUserByName(name)) {
     return res.status(400).send("User alredy exist")
   } else {
     res.status(200).send("Registration sucessfull")
@@ -78,17 +78,17 @@ app.post('/api/user/authenticate', verifyToken, (req, res) => {
   });
 });
 
-app.post('/api/user/login',[
+app.post('/api/user/login', [
   body('email').isEmail(),
   body('password').isLength({ min: 8 }).matches(
-            /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/,
-          )
-],  (req, res) => {
+    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/,
+  )
+], (req, res) => {
   // Mock user
   // 1. extract payload from request body
   console.log(req.body)
   // 2. check that request payload contains valid user data
-  
+
   const email = req.body.email
   const password = req.body.password
 
