@@ -5,7 +5,7 @@ const { verifyToken } = require("./services/jwt")
 const { validateUser } = require("./services/validate")
 const { body, validationResult } = require('express-validator');
 const app = express()
-const port = 5000
+const port = 5800
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -20,7 +20,7 @@ app.get('/api', (req, res) => {
   }
   );
 });
-
+})
 app.post('/api/user/register', [
   body('name').isLength({ min: 3 }),
   body('email').isEmail(),
@@ -119,5 +119,5 @@ app.post('/api/user/login', [
 
 
 
-app.listen(5000, () => console.log('Server started on port 5000'));
+app.listen(port, () => console.log('Server started on port 5800'));
 

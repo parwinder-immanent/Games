@@ -1,34 +1,39 @@
 import React, { useState } from 'react';
 import './Register.css';
 import axios from "axios";
-const userObj = {
-  userName: "",
-  age: "",
-  email: "",
-  password: "",
-  confirmPassword: ""
-};
+
 const RegistrationForm=()=>{
    
-  const [user, setUser] = useState(userObj)
-  
-  const formHandler=(ev)=>{
-  ev.preventDefault();
- 
-      if (user.userName==='' || user.email==='' ||   user.password===''){
-          alert('Please fill in all fields')
-      }else{
-          alert(`Welcome ${user.userName}`)
-          setUser(userObj)
+  const [user, setUser] = useState({
+    userName: "",
+    age: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
+  const [record,setRecord]=useState([]);
+  const handleInputChange=(ev)=> {
+    const name=ev.target.name;
+    const value=ev.target.value;
+    setTimeout(value,3000)
+    console.log(value)
+          setUser({ ...user, [name]:value});
       }
-  }
-const handleInputChange=(ev)=> {
+  
+      const formHandler=(ev)=>{
+  ev.preventDefault();
+  const newRecord={...record}
+  console.log(record)
+  setRecord({...user,newRecord})
+  console.log(newRecord)
+ 
+  axios.post(`https://jsonplaceholder.typicode.com/users`, { record })
+  .then(res => {
+   console.log(res);
+  console.log(res.data);
+})
+  
 
-      setUser({
-        ...user,
-        [ev.target.name]:ev.target.value
-      })
-  }
 
 
 // const RegistrationForm=()=>{
@@ -47,24 +52,24 @@ const handleInputChange=(ev)=> {
 //             "password": password,
 //             "confirmPassword":confirmPassword
 //           }
-//           axios.post(`https://jsonplaceholder.typicode.com/users`, { payload })
-//        .then(res => {
-//          console.log(res);
-//          console.log(res.data);
-//        })
-//       };
+      //     axios.post(`https://jsonplaceholder.typicode.com/users`, { payload })
+      //  .then(res => {
+      //    console.log(res);
+      //    console.log(res.data);
+      //  })
+ }
   return  (<form onSubmit={formHandler}>
 
     <label>FullName: </label>
-    <input type="text" placeholder="Enter Username" name="userName" value={user.userName} onChange={ev=>{setUserName(ev.target.value)}} required />
+    <input type="text" placeholder="Enter Username" name="userName" value={user.userName} onChange={handleInputChange} required />
     <label>age: </label>
-    <input type="text" placeholder="Enter age" name="age" value={user.age} onChange={ev=>{setAge(ev.target.value)}} required />
+    <input type="text" placeholder="Enter age" name="age" value={user.age} onChange={handleInputChange} required />
     <label>Email: </label>
-    <input type="text" placeholder="Enter email id" name="email" value={user.email} onChange={ev=>{setEmail(ev.target.value)}} required />
+    <input type="text" placeholder="Enter email id" name="email" value={user.email} onChange={handleInputChange} required />
     <label>Password: </label>
-    <input type="password" placeholder="Enter Password" name="password" value={user.password} onChange={ev=>{setPassword(ev.target.value)}} required />
+    <input type="password" placeholder="Enter Password" name="password" value={user.password} onChange={handleInputChange} required />
     <label>Confirm Password: </label>
-    <input type="password" placeholder="Enter confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={ev=>{setConfirmPassword(ev.target.value)}} required />
+    <input type="password" placeholder="Enter confirmPassword" name="confirmPassword" value={user.confirmPassword} onChange={handleInputChange} required />
     
     <button type="submit" value="Register">Create Account</button>
   </form>
