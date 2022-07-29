@@ -10,11 +10,6 @@ const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-//  just check
-
-
-
-
 // Authenticate page 
 app.get('/api', (req, res) => {
   res.json({
@@ -22,9 +17,6 @@ app.get('/api', (req, res) => {
   }
   );
 });
-
-
-
 
 app.post('/api/user/register', [
   body('name').isLength({ min: 3 }),
@@ -48,7 +40,7 @@ app.post('/api/user/register', [
 
   // 2.1 check if the user with the given email already exists in our database
 
-  if (UserDB.findUserByEmail(email) && UserDB.findUserByName(name)) {
+  if (UserDB.findUserByEmail(email)) {
     return res.status(400).send("User alredy exist")
   } else {
     res.status(200).send("Registration sucessfull")
@@ -61,8 +53,6 @@ app.post('/api/user/register', [
   // 3. login the newly registered user by returning a jwt.
   res.json(UserDB.users)
 })
-
-
 
 app.post('/api/user/authenticate', verifyToken, (req, res) => {
 
@@ -93,10 +83,14 @@ app.post('/api/user/login', [
   const password = req.body.password
 
   // 3. verify that the user existd)  s in our database
-  const user = UserDB.findUserByEmail(email)
-  if (typeof user === "undefined") {
-    res.status(200).send("please enter Your Login credential ")
-  } else {
+  const userMail = UserDB.findUserByEmail(email)
+  const userpassword = UserDB.findUserBypassword(password)
+  // const user = UserDB.findUserByEmail(email)
+
+  if (typeof userMail === "undefined" || typeof userpassword === "undefined") {
+    res.status(200).send("Please enter Your   Rigth Login credential ")
+  }
+  else {
     return res.status(400).send("Welcome")
   }
 
