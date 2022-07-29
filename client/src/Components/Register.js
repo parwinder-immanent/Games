@@ -1,4 +1,5 @@
 import './Register.css';
+import RegisterForm from './RegisterForm';
 function Register() {
   return (
     <div className="App">
